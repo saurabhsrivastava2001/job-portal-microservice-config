@@ -40,6 +40,7 @@ eureka:
 
 springdoc:
   swagger-ui:
+    disable-swagger-default-url: true
     urls:
       - name: User Service API
         url: /v3/api-docs/user-service
