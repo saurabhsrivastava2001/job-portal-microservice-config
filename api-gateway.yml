@@ -1,0 +1,26 @@
+server:
+  port: 7912
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/users/**
+        - id: job-service
+          uri: lb://job-service
+          predicates:
+            - Path=/api/jobs/**
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:7911/eureka/
+    fetchRegistry: true
+    registerWithEureka: true
