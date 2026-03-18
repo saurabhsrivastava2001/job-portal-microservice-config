@@ -1,48 +1,54 @@
 server:
-  port: 7912
+  port: 8080
 
 spring:
   cloud:
     gateway:
-      discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
       routes:
-        - id: user-service-docs
-          uri: lb://user-service
-          predicates:
-            - Path=/v3/api-docs/user-service
-          filters:
-            - RewritePath=/v3/api-docs/user-service, /v3/api-docs
         - id: user-service
-          uri: lb://user-service
+          uri: lb://USER-SERVICE
           predicates:
             - Path=/api/users/**
-            
-        - id: job-service-docs
-          uri: lb://job-service
-          predicates:
-            - Path=/v3/api-docs/job-service
           filters:
-            - RewritePath=/v3/api-docs/job-service, /v3/api-docs
+            - JwtAuthenticationFilter
         - id: job-service
-          uri: lb://job-service
+          uri: lb://JOB-SERVICE
           predicates:
             - Path=/api/jobs/**
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:7911/eureka/
-    fetchRegistry: true
-    registerWithEureka: true
+          filters:
+            - JwtAuthenticationFilter
+        - id: application-service
+          uri: lb://APPLICATION-SERVICE
+          predicates:
+            - Path=/api/applications/**
+          filters:
+            - JwtAuthenticationFilter
+        - id: resume-service
+          uri: lb://RESUME-SERVICE
+          predicates:
+            - Path=/api/resumes/**
+          filters:
+            - JwtAuthenticationFilter
+        - id: search-service
+          uri: lb://SEARCH-SERVICE
+          predicates:
+            - Path=/api/search/**
+          filters:
+            - JwtAuthenticationFilter
 
 springdoc:
+  api-docs:
+    path: /v3/api-docs
   swagger-ui:
-    disable-swagger-default-url: true
+    path: /swagger-ui.html
     urls:
-      - name: User Service API
-        url: /v3/api-docs/user-service
-      - name: Job Service API
-        url: /v3/api-docs/job-service
+      - name: user-service
+        url: /api/users/v3/api-docs
+      - name: job-service
+        url: /api/jobs/v3/api-docs
+      - name: application-service
+        url: /api/applications/v3/api-docs
+      - name: resume-service
+        url: /api/resumes/v3/api-docs
+      - name: search-service
+        url: /api/search/v3/api-docs
