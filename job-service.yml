@@ -1,6 +1,5 @@
 server:
-  port: 7914
-  forward-headers-strategy: framework
+  port: 8082
 
 spring:
   datasource:
@@ -18,7 +17,11 @@ spring:
 
 eureka:
   client:
-    serviceUrl:
-      defaultZone: http://localhost:7911/eureka/
-    fetchRegistry: true
-    registerWithEureka: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
